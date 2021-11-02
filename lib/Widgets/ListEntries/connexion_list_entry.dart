@@ -5,6 +5,7 @@ import 'package:domofit/Tools/Animations/fade_in_animation.dart';
 import 'package:domofit/Tools/sd_colors.dart';
 import 'package:domofit/main.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ConnexionListEntry extends StatefulWidget {
   const ConnexionListEntry({
@@ -95,7 +96,7 @@ class _ConnexionListEntryState extends State<ConnexionListEntry> {
                               ),
                             ),
                             Text(
-                              "Dernière utilisation : " + widget.connexion.date.toString(),
+                              "Dernière connexion : " + DateFormat('dd/MM/yyyy hh:mm').format(widget.connexion.date),
                               style: TextStyle(
                                 color: Colors.black.withOpacity(0.6),
                                 fontSize: 12,

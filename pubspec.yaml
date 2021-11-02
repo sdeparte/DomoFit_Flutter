@@ -45,6 +45,7 @@ dependencies:
   animate_icons: ^2.0.0
   web_socket_channel: ^2.1.0
   flutter_typeahead: ^3.2.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

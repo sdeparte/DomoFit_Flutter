@@ -16,7 +16,10 @@ class ConnexionsManager {
 
   Future<List<Connexion>> getAllConnexions() async {
     final db = await DBProvider.instance.database;
-    var res = await db.query("Connexion");
+    var res = await db.query(
+        "Connexion",
+        orderBy: "date DESC",
+    );
     List<Connexion> list = res.isNotEmpty ? res.map((c) => Connexion.fromMap(c)).toList() : [];
 
     return list;
