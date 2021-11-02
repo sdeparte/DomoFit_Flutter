@@ -1,4 +1,4 @@
-package app.sdeparte.domofit.domofit
+package app.sdeparte.domofit
 
 import io.flutter.embedding.android.FlutterActivity
 
