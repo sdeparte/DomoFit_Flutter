@@ -1,4 +1,8 @@
 
+import 'dart:io';
+
+import 'package:dart_ping/dart_ping.dart';
+import 'package:dart_ping_ios/dart_ping_ios.dart';
 import 'package:domofit/Models/connexion.dart';
 import 'package:domofit/Routes/main_route.dart';
 import 'package:domofit/Tools/Animations/fade_in_animation.dart';
@@ -24,6 +28,39 @@ class ConnexionListEntry extends StatefulWidget {
 }
 
 class _ConnexionListEntryState extends State<ConnexionListEntry> {
+  Ping? ping;
+  bool reachable = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _isReachable();
+  }
+
+  @override
+  void dispose() {
+    ping?.stop();
+
+    super.dispose();
+  }
+
+  Future<void> _isReachable() async {
+    if (Platform.isIOS) {
+      DartPingIOS.register();
+    }
+
+    ping = Ping(widget.connexion.ipAddress);
+
+    ping?.stream.listen((event) {
+      if (event.summary == null) {
+        setState(() {
+          reachable = event.error == null;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FadeInAnimation(
@@ -46,12 +83,12 @@ class _ConnexionListEntryState extends State<ConnexionListEntry> {
             child: Row(
               children: [
                 Stack(
-                  children: const [
+                  children: [
                     Material(
-                      shape: CircleBorder(),
-                      color: Colors.lightBlue,
+                      shape: const CircleBorder(),
+                      color: reachable ? Colors.lightBlue : SdColors.greyBackAccent,
                       elevation: 2.0,
-                      child: Padding(
+                      child: const Padding(
                         padding: EdgeInsets.all(15.0),
                         child: Icon(
                           Icons.devices_rounded,
@@ -65,13 +102,13 @@ class _ConnexionListEntryState extends State<ConnexionListEntry> {
                       right: 0,
                       child: Material(
                         elevation: 5.0,
-                        shape: CircleBorder(),
-                        color: SdColors.white,
+                        shape: const CircleBorder(),
+                        color: reachable ? Colors.white : SdColors.greyBack,
                         child: Padding(
-                          padding: EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: Icon(
-                            Icons.wifi,
-                            color: Colors.lightBlue,
+                            reachable ? Icons.wifi : Icons.wifi_off,
+                            color: reachable ? Colors.lightBlue : Colors.white,
                             size: 20,
                           ),
                         ),
