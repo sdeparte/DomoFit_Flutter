@@ -8,6 +8,7 @@ import 'package:domofit/Models/connexion.dart';
 import 'package:domofit/Tools/Animations/fade_in_and_translate_y_animation.dart';
 import 'package:domofit/Tools/Animations/height_animation.dart';
 import 'package:domofit/Tools/sd_colors.dart';
+import 'package:domofit/Widgets/blinking_widget.dart';
 import 'package:domofit/Widgets/control_widget.dart';
 import 'package:domofit/Widgets/light_widget.dart';
 import 'package:domofit/Widgets/shortcuts_widget.dart';
@@ -49,8 +50,8 @@ class MainRouteState extends State<MainRoute> {
   void initState() {
     super.initState();
 
-    connectToServer();
-    getConfiguration();
+    _connectToServer();
+    _getConfiguration();
   }
 
   @override
@@ -60,7 +61,7 @@ class MainRouteState extends State<MainRoute> {
     super.dispose();
   }
 
-  void connectToServer() async {
+  void _connectToServer() async {
     if (widget.ipAddress != null) {
       setState(() {
         isConnecting = true;
@@ -80,17 +81,25 @@ class MainRouteState extends State<MainRoute> {
           (dynamic message) {
             _onDataReceived(message);
           },
-          onDone: onDisconnected,
-          onError: (dynamic error) => onDisconnected(),
+          onDone: _onDisconnected,
+          onError: (dynamic error) => _onDisconnected(),
         );
 
         _channel?.sink.add("ALW STATE");
         _channel?.sink.add("LUM STATE");
-      });
+      }).timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            setState(() {
+              isConnecting = false;
+              isConnected = false;
+            });
+          }
+      );
     }
   }
 
-  void onDisconnected() async {
+  void _onDisconnected() async {
     if (_channel?.stream != null) {
       _channel?.sink.close();
     }
@@ -99,10 +108,10 @@ class MainRouteState extends State<MainRoute> {
       isConnected = false;
     });
 
-    connectToServer();
+    _connectToServer();
   }
 
-  void getConfiguration() async {
+  void _getConfiguration() async {
     Configuration? configuration = await ConfigurationsManager.instance.getConfiguration();
 
     if (null != configuration) {
@@ -158,6 +167,7 @@ class MainRouteState extends State<MainRoute> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    bool isButton = !isConnecting && !isConnected && widget.ipAddress != null;
 
     return WillPopScope(
       onWillPop: () async {
@@ -179,27 +189,22 @@ class MainRouteState extends State<MainRoute> {
           actions: <Widget>[
             FloatingActionButton(
               heroTag: "connexionSetting",
-              backgroundColor: Colors.white,
-              splashColor: Colors.lightBlue,
+              backgroundColor: isButton ? Colors.white : Colors.transparent,
+              splashColor: isButton ? Colors.lightBlue : null,
               elevation: 0,
               mini: true,
-              child: Icon(
-                isConnecting
-                    ? Icons.wifi_protected_setup
-                    : isConnected
-                    ? Icons.wifi
-                    : Icons.wifi_off,
-                color: Colors.lightBlue,
-              ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => DiscoveryRoute(myApp: widget.myApp),
-                    transitionDuration: const Duration(seconds: 0),
-                  ),
-                );
-              },
+              child: isConnecting
+                  ? BlinkingWidget(
+                      child: Icon(
+                        Icons.wifi,
+                        color: isButton ? Colors.lightBlue : Colors.white,
+                      ),
+                    )
+                  : Icon(
+                      isConnected ? Icons.wifi : Icons.wifi_off,
+                      color: isButton ? Colors.lightBlue : Colors.white,
+                    ),
+              onPressed: isButton ? _connectToServer : null,
             ),
           ],
         ),
