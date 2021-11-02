@@ -108,6 +108,8 @@ class _DiscoveryRouteState extends State<DiscoveryRoute> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
+    var scanArea = (screenWidth < 400 || screenHeight < 400) ? 200.0 : 400.0;
+
     return WillPopScope(
       onWillPop: () async {
         widget.myApp.showExitDialog(context);
@@ -171,11 +173,40 @@ class _DiscoveryRouteState extends State<DiscoveryRoute> {
                       delay: 0,
                       child: Card(
                         elevation: 5.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: QRView(
-                            key: qrKey,
-                            onQRViewCreated: _onQRViewCreated,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                          child: Stack(
+                            children: [
+                              QRView(
+                                key: qrKey,
+                                onQRViewCreated: _onQRViewCreated,
+                                overlay: QrScannerOverlayShape(
+                                    borderColor: Colors.white,
+                                    borderRadius: 10,
+                                    borderLength: 30,
+                                    borderWidth: 10,
+                                    cutOutSize: scanArea),
+                              ),
+                              const Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Padding(
+                                  padding: EdgeInsets.only(bottom: 25.0),
+                                  child: Card(
+                                    elevation: 0,
+                                    color: Colors.black54,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Placez le QR Code dans le cadre",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
