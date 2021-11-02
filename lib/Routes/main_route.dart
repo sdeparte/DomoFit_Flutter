@@ -161,7 +161,13 @@ class MainRouteState extends State<MainRoute> {
 
     return WillPopScope(
       onWillPop: () async {
-        widget.myApp.showExitDialog(context);
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) => DiscoveryRoute(myApp: widget.myApp),
+            transitionDuration: const Duration(seconds: 0),
+          ),
+        );
         return true;
       },
       child: Scaffold(
