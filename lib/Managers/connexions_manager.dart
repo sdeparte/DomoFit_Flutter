@@ -37,6 +37,15 @@ class ConnexionsManager {
     return list.isNotEmpty ? list.first : null;
   }
 
+  Future<void> removeConnexion(Connexion connexion) async {
+    final db = await DBProvider.instance.database;
+    await db.delete(
+        "Connexion",
+        where: "ipAddress = ?",
+        whereArgs: [connexion.ipAddress]
+    );
+  }
+
   Future<Connexion> updateConnexion(Connexion connexion) async {
     if (await getConnexion(connexion) == null) {
       return _newConnexion(connexion);

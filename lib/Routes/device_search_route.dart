@@ -26,14 +26,14 @@ class DiscoveryRoute extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _DiscoveryRouteState();
+    return DiscoveryRouteState();
   }
 }
 
-class _DiscoveryRouteState extends State<DiscoveryRoute> {
+class DiscoveryRouteState extends State<DiscoveryRoute> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
-  late double delay = 3.5;
+  late bool animation = true;
   late List<Connexion> connexions = <Connexion>[];
 
   late bool scanQRCode = false;
@@ -103,6 +103,14 @@ class _DiscoveryRouteState extends State<DiscoveryRoute> {
     });
   }
 
+  void removeConnexion(Connexion connexion) async {
+    await ConnexionsManager.instance.removeConnexion(connexion);
+
+    setState(() {
+      connexions.remove(connexion);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -158,7 +166,7 @@ class _DiscoveryRouteState extends State<DiscoveryRoute> {
                     ),
                     onPressed: () {
                       setState(() {
-                        delay = 0;
+                        animation = false;
                         scanQRCode = !scanQRCode;
                       });
                     },
@@ -222,8 +230,10 @@ class _DiscoveryRouteState extends State<DiscoveryRoute> {
                       },
                       itemBuilder: (BuildContext context, index) {
                         return ConnexionListEntry(
-                            delay: delay + index,
+                            animate: animation,
+                            delay: 3.5 + index,
                             connexion: connexions[index],
+                            discoveryRouteState: this,
                             myApp: widget.myApp
                         );
                       },
