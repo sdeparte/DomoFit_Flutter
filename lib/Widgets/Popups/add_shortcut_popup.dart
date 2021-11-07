@@ -33,15 +33,15 @@ class _AddShortcutPopupState extends State<AddShortcutPopup> {
   }
 
   Future<void> checkAppAvailability(String packageName) async {
-    Map<String, String?>? appInfo;
+    Map<String, String?>? _appInfo;
 
     try {
-      appInfo = await AppAvailability.checkAvailability(packageName);
+      _appInfo = await AppAvailability.checkAvailability(packageName);
     } on PlatformException catch(e) {
       log(e.message ?? "PlatformException throw");
     }
 
-    bool appAvailable = appInfo?.isNotEmpty ?? false;
+    bool appAvailable = _appInfo?.isNotEmpty ?? false;
 
     if (Platform.isAndroid && appAvailable) {
       appAvailable = await AppAvailability.isAppEnabled(packageName) ?? false;

@@ -32,7 +32,7 @@ class ShortcutsWidgetState extends State<ShortcutsWidget> with SingleTickerProvi
   late AnimateIconController _iconAnimationControllerShortcuts;
 
   bool _isEditMode = false;
-  bool isEditModeInstant = false;
+  bool _isEditModeInstant = false;
 
   late List<Shortcut> _shortcuts;
 
@@ -68,14 +68,14 @@ class ShortcutsWidgetState extends State<ShortcutsWidget> with SingleTickerProvi
       case AnimationStatus.forward:
         setState(() {
           _iconAnimationControllerShortcuts.animateToEnd();
-          isEditModeInstant = true;
+          _isEditModeInstant = true;
         });
         break;
 
       case AnimationStatus.reverse:
         setState(() {
           _iconAnimationControllerShortcuts.animateToStart();
-          isEditModeInstant = false;
+          _isEditModeInstant = false;
         });
         break;
     }
@@ -185,7 +185,7 @@ class ShortcutsWidgetState extends State<ShortcutsWidget> with SingleTickerProvi
 
     List<Widget> shortcuts = <Widget>[];
 
-    if (isEditModeInstant) {
+    if (_isEditModeInstant) {
       shortcuts.add(
         FadeInAndSizeAnimation(
           delay: 0,
@@ -213,12 +213,12 @@ class ShortcutsWidgetState extends State<ShortcutsWidget> with SingleTickerProvi
       shortcuts.add(
         ShortcutButton(
           shortcut: shortcut,
-          backgroundColor: isEditModeInstant ? SdColors.red : Colors.lightBlue,
-          noLogoBackgroundColor: isEditModeInstant ? SdColors.redAccent : SdColors.blackAccent,
-          pictoBackgroundColor: isEditModeInstant ? SdColors.red : Colors.lightBlue,
-          pictoIcon: isEditModeInstant ? Icons.delete_outline : Icons.exit_to_app,
+          backgroundColor: _isEditModeInstant ? SdColors.red : Colors.lightBlue,
+          noLogoBackgroundColor: _isEditModeInstant ? SdColors.redAccent : SdColors.blackAccent,
+          pictoBackgroundColor: _isEditModeInstant ? SdColors.red : Colors.lightBlue,
+          pictoIcon: _isEditModeInstant ? Icons.delete_outline : Icons.exit_to_app,
           splashColor: Colors.white,
-          onTap: isEditModeInstant
+          onTap: _isEditModeInstant
               ? () { showRemoveShortcutDialog(shortcut); }
               : () { AppAvailability.launchApp(shortcut.appInformations!["package_name"] as String); },
         )
@@ -291,14 +291,14 @@ class ShortcutsWidgetState extends State<ShortcutsWidget> with SingleTickerProvi
                           return true;
                         },
                         duration: const Duration(milliseconds: 500),
-                        startIconColor: isEditModeInstant || _isEditMode ? SdColors.orange : Theme.of(context).primaryColor,
+                        startIconColor: _isEditModeInstant || _isEditMode ? SdColors.orange : Theme.of(context).primaryColor,
                         controller: _iconAnimationControllerShortcuts,
                       ),
                       splashColor: SdColors.orange,
                       mini: true,
                       elevation: 2.0,
                       backgroundColor: Colors.white,
-                      onPressed: !isEditModeInstant ? startEditRemote : cancelEditRemote,
+                      onPressed: !_isEditModeInstant ? startEditRemote : cancelEditRemote,
                     ),
                   ),
                 ],

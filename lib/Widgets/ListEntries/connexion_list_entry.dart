@@ -35,8 +35,8 @@ class ConnexionListEntry extends StatefulWidget {
 }
 
 class _ConnexionListEntryState extends State<ConnexionListEntry> {
-  Ping? ping;
-  bool reachable = false;
+  Ping? _ping;
+  bool _reachable = false;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _ConnexionListEntryState extends State<ConnexionListEntry> {
 
   @override
   void dispose() {
-    ping?.stop();
+    _ping?.stop();
 
     super.dispose();
   }
@@ -57,12 +57,12 @@ class _ConnexionListEntryState extends State<ConnexionListEntry> {
       DartPingIOS.register();
     }
 
-    ping = Ping(widget.connexion.ipAddress);
+    _ping = Ping(widget.connexion.ipAddress);
 
-    ping?.stream.listen((event) {
+    _ping?.stream.listen((event) {
       if (event.summary == null) {
         setState(() {
-          reachable = event.error == null;
+          _reachable = event.error == null;
         });
       }
     });
@@ -90,7 +90,7 @@ class _ConnexionListEntryState extends State<ConnexionListEntry> {
                 children: [
                   Material(
                     shape: const CircleBorder(),
-                    color: reachable ? Colors.lightBlue : SdColors.greyBackAccent,
+                    color: _reachable ? Colors.lightBlue : SdColors.greyBackAccent,
                     elevation: 2.0,
                     child: const Padding(
                       padding: EdgeInsets.all(15.0),
@@ -107,12 +107,12 @@ class _ConnexionListEntryState extends State<ConnexionListEntry> {
                     child: Material(
                       elevation: 5.0,
                       shape: const CircleBorder(),
-                      color: reachable ? Colors.white : SdColors.greyBack,
+                      color: _reachable ? Colors.white : SdColors.greyBack,
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Icon(
-                          reachable ? Icons.wifi : Icons.wifi_off,
-                          color: reachable ? Colors.lightBlue : Colors.white,
+                          _reachable ? Icons.wifi : Icons.wifi_off,
+                          color: _reachable ? Colors.lightBlue : Colors.white,
                           size: 20,
                         ),
                       ),

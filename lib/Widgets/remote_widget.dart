@@ -25,7 +25,7 @@ class RemoteWidget extends StatefulWidget {
 }
 
 class RemoteWidgetState extends State<RemoteWidget> {
-  Map<String, dynamic> buttonsMap = <String, dynamic>{};
+  Map<String, dynamic> _buttonsMap = <String, dynamic>{};
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class RemoteWidgetState extends State<RemoteWidget> {
     }
 
     setState(() {
-      this.buttonsMap = buttonsMap;
+      this._buttonsMap = buttonsMap;
     });
   }
 
@@ -57,10 +57,10 @@ class RemoteWidgetState extends State<RemoteWidget> {
       return () { showEditRemoteButtonDialog(remotePartIdent, buttonIdent); };
     } else {
       if (widget.mainRouteState.isConnected &&
-          buttonsMap.containsKey(remotePartIdent) &&
-          buttonsMap[remotePartIdent].containsKey(buttonIdent)
+          _buttonsMap.containsKey(remotePartIdent) &&
+          _buttonsMap[remotePartIdent].containsKey(buttonIdent)
       ) {
-        Button button = buttonsMap[remotePartIdent][buttonIdent];
+        Button button = _buttonsMap[remotePartIdent][buttonIdent];
 
         if (!["", null].contains(button.commande)) {
           return () { widget.mainRouteState.sendMessage(button.commande); };
@@ -74,21 +74,21 @@ class RemoteWidgetState extends State<RemoteWidget> {
   Future<void> updateButton(Button button) async {
     await ButtonsManager.instance.updateButton(button);
 
-    if (buttonsMap.containsKey(button.remotePartIdent)) {
-      buttonsMap[button.remotePartIdent][button.buttonIdent] = button;
+    if (_buttonsMap.containsKey(button.remotePartIdent)) {
+      _buttonsMap[button.remotePartIdent][button.buttonIdent] = button;
     } else {
       Map<String, Button> buttonSubMap = {button.buttonIdent: button};
-      buttonsMap[button.remotePartIdent] = buttonSubMap;
+      _buttonsMap[button.remotePartIdent] = buttonSubMap;
     }
   }
 
   void showEditRemoteButtonDialog(String remotePartIdent, String buttonIdent) {
     Button button = Button(remotePartIdent: remotePartIdent, buttonIdent: buttonIdent, commande: '');
 
-    if (buttonsMap.containsKey(remotePartIdent) &&
-        buttonsMap[remotePartIdent].containsKey(buttonIdent)
+    if (_buttonsMap.containsKey(remotePartIdent) &&
+        _buttonsMap[remotePartIdent].containsKey(buttonIdent)
     ) {
-      button = buttonsMap[remotePartIdent][buttonIdent];
+      button = _buttonsMap[remotePartIdent][buttonIdent];
     }
 
     showGeneralDialog(

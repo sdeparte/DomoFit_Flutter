@@ -4,7 +4,6 @@ import 'package:domofit/Managers/connexions_manager.dart';
 import 'package:domofit/Models/connexion.dart';
 import 'package:domofit/Tools/Animations/fade_in_animation.dart';
 import 'package:domofit/Widgets/ListEntries/connexion_list_entry.dart';
-import 'package:domofit/Widgets/SnackBar/progress_snack_bar.dart';
 import 'package:domofit/Widgets/home_page_header_widget.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -32,15 +31,15 @@ class DiscoveryRoute extends StatefulWidget {
 }
 
 class DiscoveryRouteState extends State<DiscoveryRoute> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
 
-  late bool animation = true;
-  late List<Connexion> connexions = <Connexion>[];
+  late bool _animation = true;
+  late List<Connexion> _connexions = <Connexion>[];
 
-  late bool scanQRCode = false;
-  late Barcode result;
+  late bool _scanQRCode = false;
+  late Barcode _result;
 
-  QRViewController? controller;
+  QRViewController? _controller;
 
   @override
   initState() {
@@ -51,7 +50,7 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
 
   @override
   void dispose() {
-    controller?.dispose();
+    _controller?.dispose();
 
     super.dispose();
   }
@@ -63,25 +62,25 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
     super.reassemble();
 
     if (Platform.isAndroid) {
-      controller?.pauseCamera();
+      _controller?.pauseCamera();
     } else if (Platform.isIOS) {
-      controller?.resumeCamera();
+      _controller?.resumeCamera();
     }
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
+    _controller = controller;
 
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        result = scanData;
+        _result = scanData;
 
         RegExp exp = RegExp(r"\?ip=([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})");
-        RegExpMatch? matche = exp.firstMatch(result.code);
+        RegExpMatch? matche = exp.firstMatch(_result.code);
 
         if (matche != null) {
           setState(() {
-            scanQRCode = false;
+            _scanQRCode = false;
           });
 
           Navigator.pushReplacement(
@@ -100,14 +99,14 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
     List<Connexion> connexions = await ConnexionsManager.instance.getAllConnexions();
 
     setState(() {
-      this.animation = animation;
-      this.connexions = connexions;
+      _animation = animation;
+      _connexions = connexions;
     });
   }
 
   void removeConnexionFromList(Connexion connexion) async {
     setState(() {
-      connexions.remove(connexion);
+      _connexions.remove(connexion);
     });
   }
 
@@ -150,7 +149,7 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
                 ),
               ),
             ),
-            HomePageHeaderWidget(screenHeight: screenHeight, screenWidth: screenWidth, scanQRCode: scanQRCode),
+            HomePageHeaderWidget(screenHeight: screenHeight, screenWidth: screenWidth, scanQRCode: _scanQRCode),
             SizedBox(
               height: 100,
               child: AppBar(
@@ -165,20 +164,20 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
                     elevation: 0,
                     mini: true,
                     child: Icon(
-                      scanQRCode ? Icons.close : Icons.qr_code,
+                      _scanQRCode ? Icons.close : Icons.qr_code,
                       color: Colors.lightBlue,
                     ),
                     onPressed: () {
                       setState(() {
-                        animation = false;
-                        scanQRCode = !scanQRCode;
+                        _animation = false;
+                        _scanQRCode = !_scanQRCode;
                       });
                     },
                   ),
                 ],
               ),
             ),
-            scanQRCode
+            _scanQRCode
                 ? Padding(
                     padding: EdgeInsets.only(top: screenHeight / 2.5 - 60, bottom: 60, left: 15, right: 15),
                     child: FadeInAnimation(
@@ -190,7 +189,7 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
                           child: Stack(
                             children: [
                               QRView(
-                                key: qrKey,
+                                key: _qrKey,
                                 onQRViewCreated: _onQRViewCreated,
                                 overlay: QrScannerOverlayShape(
                                     borderColor: Colors.white,
@@ -227,16 +226,16 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
                 : Padding(
                     padding: EdgeInsets.only(top: screenHeight / 2.5 - 70, bottom: 50),
                     child: ListView.separated(
-                      itemCount: connexions.length,
+                      itemCount: _connexions.length,
                       padding: const EdgeInsets.all(15.0),
                       separatorBuilder: (BuildContext context, int index) {
                         return const SizedBox(height: 8.0);
                       },
                       itemBuilder: (BuildContext context, index) {
                         return ConnexionListEntry(
-                            animate: animation,
+                            animate: _animation,
                             delay: 3.5 + index,
-                            connexion: connexions[index],
+                            connexion: _connexions[index],
                             discoveryRouteState: this,
                             myApp: widget.myApp
                         );

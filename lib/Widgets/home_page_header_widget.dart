@@ -25,9 +25,9 @@ class HomePageHeaderWidget extends StatelessWidget {
           Positioned(
             top: screenHeight * 3/50,
             left: screenWidth * 8/50,
-            child: FadeInAndTranslateYAnimation(
+            child: const FadeInAndTranslateYAnimation(
               delay: 2.5,
-              child: const Opacity(
+              child: Opacity(
                 opacity: 0.4,
                 child: Image(
                   image: Svg('assets/logo.svg', size: Size.fromRadius(17)),
@@ -38,9 +38,9 @@ class HomePageHeaderWidget extends StatelessWidget {
           Positioned(
             top: screenHeight * 6/50,
             left: screenWidth * 5/50,
-            child: FadeInAndTranslateYAnimation(
+            child: const FadeInAndTranslateYAnimation(
               delay: 2.25,
-              child: const Opacity(
+              child: Opacity(
                 opacity: 0.5,
                 child: Image(
                   image: Svg('assets/logo.svg', size: Size.fromRadius(20)),
@@ -51,9 +51,9 @@ class HomePageHeaderWidget extends StatelessWidget {
           Positioned(
             top: screenHeight * 8/50,
             left: screenWidth * 13/50,
-            child: FadeInAndTranslateYAnimation(
+            child: const FadeInAndTranslateYAnimation(
               delay: 2.5,
-              child: const Opacity(
+              child: Opacity(
                 opacity: 0.3,
                 child: Image(
                   image: Svg('assets/logo.svg', size: Size.fromRadius(12)),
@@ -64,9 +64,9 @@ class HomePageHeaderWidget extends StatelessWidget {
           Positioned(
             top: screenHeight * 4.5/50,
             left: screenWidth * 9/50,
-            child: FadeInAndTranslateYAnimation(
+            child: const FadeInAndTranslateYAnimation(
               delay: 2.75,
-              child: const Opacity(
+              child: Opacity(
                 opacity: 0.6,
                 child: Image(
                   image: Svg('assets/logo.svg', size: Size.fromRadius(30)),
@@ -77,9 +77,9 @@ class HomePageHeaderWidget extends StatelessWidget {
           Positioned(
             top: screenHeight * 2.5/50,
             right: screenWidth * 13/50,
-            child: FadeInAndTranslateYAnimation(
+            child: const FadeInAndTranslateYAnimation(
               delay: 2.25,
-              child: const Opacity(
+              child: Opacity(
                 opacity: 0.5,
                 child: Image(
                   image: Svg('assets/logo.svg', size: Size.fromRadius(20)),
@@ -90,9 +90,9 @@ class HomePageHeaderWidget extends StatelessWidget {
           Positioned(
             top: screenHeight * 4/50,
             right: screenWidth * 8/50,
-            child: FadeInAndTranslateYAnimation(
+            child: const FadeInAndTranslateYAnimation(
               delay: 2.75,
-              child: const Opacity(
+              child: Opacity(
                 opacity: 0.3,
                 child: Image(
                   image: Svg('assets/logo.svg', size: Size.fromRadius(12)),
@@ -103,9 +103,9 @@ class HomePageHeaderWidget extends StatelessWidget {
           Positioned(
             top: screenHeight * 5.5/50,
             right: screenWidth * 9/50,
-            child: FadeInAndTranslateYAnimation(
+            child: const FadeInAndTranslateYAnimation(
               delay: 2.5,
-              child: const Opacity(
+              child: Opacity(
                 opacity: 0.6,
                 child: Image(
                   image: Svg('assets/logo.svg', size: Size.fromRadius(25)),
@@ -116,9 +116,9 @@ class HomePageHeaderWidget extends StatelessWidget {
           Positioned(
             top: screenHeight * 8/50,
             right: screenWidth * 6/50,
-            child: FadeInAndTranslateYAnimation(
+            child: const FadeInAndTranslateYAnimation(
               delay: 3,
-              child: const Opacity(
+              child: Opacity(
                 opacity: 0.4,
                 child: Image(
                   image: Svg('assets/logo.svg', size: Size.fromRadius(15)),
@@ -142,9 +142,9 @@ class HomePageHeaderWidget extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  FadeInAndTranslateYAnimation(
+                  const FadeInAndTranslateYAnimation(
                     delay: 3,
-                    child: const Text("Trouver ma DomoFit-Box :",
+                    child: Text("Trouver ma DomoFit-Box :",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

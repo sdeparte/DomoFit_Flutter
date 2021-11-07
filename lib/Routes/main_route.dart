@@ -40,8 +40,6 @@ class MainRouteState extends State<MainRoute> {
 
   TextEditingController? listeningEditButtonController;
 
-  int currentLightIntensityValue = 0;
-
   IOWebSocketChannel? _channel;
   bool isConnecting = false;
   bool isConnected = false;
