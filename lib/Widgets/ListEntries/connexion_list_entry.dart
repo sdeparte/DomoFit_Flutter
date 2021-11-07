@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dart_ping/dart_ping.dart';
@@ -8,6 +9,7 @@ import 'package:domofit/Routes/device_search_route.dart';
 import 'package:domofit/Routes/main_route.dart';
 import 'package:domofit/Tools/Animations/fade_in_animation.dart';
 import 'package:domofit/Tools/sd_colors.dart';
+import 'package:domofit/Widgets/SnackBar/progress_snack_bar.dart';
 import 'package:domofit/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -159,7 +161,27 @@ class _ConnexionListEntryState extends State<ConnexionListEntry> {
     return Dismissible(
       key: ObjectKey(widget.connexion),
       onDismissed: (direction) {
-        widget.discoveryRouteState.removeConnexion(widget.connexion);
+        widget.discoveryRouteState.removeConnexionFromList(widget.connexion);
+
+        Timer timer = Timer(const Duration(seconds: 4), () {
+          widget.discoveryRouteState.removeConnexionFromDatabase(widget.connexion);
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          ProgressSnackBar(
+            content: const Text("Suppression de la connexion récente."),
+            action: SnackBarAction(
+              label: "Annuler",
+              textColor: Colors.white,
+              onPressed: () {
+                timer.cancel();
+                widget.discoveryRouteState.reloadConnexions(
+                    animation: false
+                );
+              },
+            ),
+          ),
+        );
       },
       child: widget.animate
           ? FadeInAnimation(

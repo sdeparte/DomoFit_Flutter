@@ -4,6 +4,7 @@ import 'package:domofit/Managers/connexions_manager.dart';
 import 'package:domofit/Models/connexion.dart';
 import 'package:domofit/Tools/Animations/fade_in_animation.dart';
 import 'package:domofit/Widgets/ListEntries/connexion_list_entry.dart';
+import 'package:domofit/Widgets/SnackBar/progress_snack_bar.dart';
 import 'package:domofit/Widgets/home_page_header_widget.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -43,7 +44,7 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
 
   @override
   initState() {
-    _getLastConnexions();
+    reloadConnexions();
 
     super.initState();
   }
@@ -66,14 +67,6 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
     } else if (Platform.isIOS) {
       controller?.resumeCamera();
     }
-  }
-
-  void _getLastConnexions() async {
-    List<Connexion> connexions = await ConnexionsManager.instance.getAllConnexions();
-
-    setState(() {
-      this.connexions = connexions;
-    });
   }
 
   void _onQRViewCreated(QRViewController controller) {
@@ -103,12 +96,23 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
     });
   }
 
-  void removeConnexion(Connexion connexion) async {
-    await ConnexionsManager.instance.removeConnexion(connexion);
+  void reloadConnexions({bool animation = true}) async {
+    List<Connexion> connexions = await ConnexionsManager.instance.getAllConnexions();
 
+    setState(() {
+      this.animation = animation;
+      this.connexions = connexions;
+    });
+  }
+
+  void removeConnexionFromList(Connexion connexion) async {
     setState(() {
       connexions.remove(connexion);
     });
+  }
+
+  void removeConnexionFromDatabase(Connexion connexion) async {
+    await ConnexionsManager.instance.removeConnexion(connexion);
   }
 
   @override
