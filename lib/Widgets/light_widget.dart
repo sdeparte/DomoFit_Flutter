@@ -189,7 +189,7 @@ class _LightWidgetState extends State<LightWidget> with SingleTickerProviderStat
                       child: Text(
                         !widget.mainRouteState.isConnected
                           ? 'Mode d\'éclairage : "Inconnu".'
-                          : _isLightOnInstant
+                          : widget.mainRouteState.isForceOn
                             ? 'Mode d\'éclairage : "Toujours allumé".'
                             : 'Mode d\'éclairage : "Détection de présence".',
                         style: const TextStyle(color: Colors.white),
