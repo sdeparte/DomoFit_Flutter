@@ -130,13 +130,13 @@ class MainRouteState extends State<MainRoute> {
             isForceOn = true;
           });
 
-          iconAnimationControllerLight.animateToEnd;
+          iconAnimationControllerLight.animateToEnd();
         } else {
           setState(() {
             isForceOn = false;
           });
 
-          iconAnimationControllerLight.animateToStart;
+          iconAnimationControllerLight.animateToStart();
         }
       } else if (matche.group(1) == "LUM") {
         if (matche.group(2) == "1") {
