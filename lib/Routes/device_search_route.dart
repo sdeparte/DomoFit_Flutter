@@ -149,6 +149,10 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
   void reloadConnexions({bool animation = true}) async {
     List<Connexion> connexions = await ConnexionsManager.instance.getAllConnexions();
 
+    if (!mounted) {
+      return;
+    }
+
     setState(() {
       _animation = animation;
       _connexions = connexions;
