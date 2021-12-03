@@ -4,13 +4,16 @@ import 'package:domofit/Managers/connexions_manager.dart';
 import 'package:domofit/Models/connexion.dart';
 import 'package:domofit/Tools/Animations/fade_in_animation.dart';
 import 'package:domofit/Widgets/ListEntries/connexion_list_entry.dart';
+import 'package:domofit/Widgets/SnackBar/progress_snack_bar.dart';
 import 'package:domofit/Widgets/home_page_header_widget.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import 'package:domofit/main.dart';
 import 'package:domofit/Tools/Animations/height_animation.dart';
 import 'package:domofit/Tools/sd_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:uni_links/uni_links.dart';
 
 import 'main_route.dart';
 
@@ -37,12 +40,13 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
   late List<Connexion> _connexions = <Connexion>[];
 
   late bool _scanQRCode = false;
-  late Barcode _result;
 
   QRViewController? _controller;
 
   @override
   initState() {
+    _handleInitialUri();
+
     reloadConnexions();
 
     super.initState();
@@ -68,31 +72,62 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
     }
   }
 
+  Future<void> _handleInitialUri() async {
+    if (!widget.myApp.getInitialUriIsHandled()) {
+      widget.myApp.setInitialUriIsHandled();
+
+      try {
+        if (!mounted) return;
+
+        final url = await getInitialUri();
+
+        if (url == null || !mounted) {
+          return;
+        }
+
+        setState(() {
+          _handleDeeplink(url.toString(), fromCamera: true);
+        });
+      } on PlatformException {
+        ScaffoldMessenger.of(context).showSnackBar(
+          ProgressSnackBar(
+            content: const Text("Erreur de lecture du QRCode."),
+            backgroundColor: SdColors.red,
+            progressBackgroundColor: Colors.red.shade50,
+            progressValueColor: Colors.red.shade800,
+          ),
+        );
+      }
+    }
+  }
+
   void _onQRViewCreated(QRViewController controller) {
     _controller = controller;
 
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        _result = scanData;
-
-        RegExp exp = RegExp(r"\?ip=([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})");
-        RegExpMatch? matche = exp.firstMatch(_result.code);
-
-        if (matche != null) {
-          setState(() {
-            _scanQRCode = false;
-          });
-
-          Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => MainRoute(myApp: widget.myApp, ipAddress: matche.group(1)),
-              transitionDuration: const Duration(seconds: 0),
-            ),
-          );
-        }
+        _handleDeeplink(scanData.code);
       });
     });
+  }
+
+  void _handleDeeplink(String url) {
+    RegExp exp = RegExp(r"\?ip=([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})");
+    RegExpMatch? matche = exp.firstMatch(url);
+
+    if (matche != null) {
+      setState(() {
+        _scanQRCode = false;
+      });
+
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => MainRoute(myApp: widget.myApp, ipAddress: matche.group(1)),
+          transitionDuration: const Duration(seconds: 0),
+        ),
+      );
+    }
   }
 
   void reloadConnexions({bool animation = true}) async {
