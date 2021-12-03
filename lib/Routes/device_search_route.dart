@@ -117,28 +117,32 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
 
     if (matche != null) {
       String ip = matche.group(1) ?? '';
-      setState(() {
-        _scanQRCode = false;
-      });
+      RegExp exp = RegExp(r"(^127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$)|(^10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$)|(^172\.1[6-9]{1}[0-9]{0,1}\.[0-9]{1,3}\.[0-9]{1,3}$)|(^172\.2[0-9]{1}[0-9]{0,1}\.[0-9]{1,3}\.[0-9]{1,3}$)|(^172\.3[0-1]{1}[0-9]{0,1}\.[0-9]{1,3}\.[0-9]{1,3}$)|(^192\.168\.[0-9]{1,3}\.[0-9]{1,3}$)");
 
-      if (fromCamera) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          ProgressSnackBar(
-            content: Text("Connexion direct à $ip via lecture de QRCode."),
-            backgroundColor: Colors.lightBlue,
-            progressBackgroundColor: Colors.lightBlue.shade50,
-            progressValueColor: Colors.lightBlue.shade700,
+      if (exp.hasMatch(ip)) {
+        setState(() {
+          _scanQRCode = false;
+        });
+
+        if (fromCamera) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            ProgressSnackBar(
+              content: Text("Connexion direct à $ip via lecture de QRCode."),
+              backgroundColor: Colors.lightBlue,
+              progressBackgroundColor: Colors.lightBlue.shade50,
+              progressValueColor: Colors.lightBlue.shade700,
+            ),
+          );
+        }
+
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) => MainRoute(myApp: widget.myApp, ipAddress: ip),
+            transitionDuration: const Duration(seconds: 0),
           ),
         );
       }
-
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => MainRoute(myApp: widget.myApp, ipAddress: ip),
-          transitionDuration: const Duration(seconds: 0),
-        ),
-      );
     }
   }
 
