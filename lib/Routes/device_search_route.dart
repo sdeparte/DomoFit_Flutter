@@ -111,19 +111,31 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
     });
   }
 
-  void _handleDeeplink(String url) {
+  void _handleDeeplink(String url, {bool fromCamera = false}) {
     RegExp exp = RegExp(r"\?ip=([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})");
     RegExpMatch? matche = exp.firstMatch(url);
 
     if (matche != null) {
+      String ip = matche.group(1) ?? '';
       setState(() {
         _scanQRCode = false;
       });
 
+      if (fromCamera) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          ProgressSnackBar(
+            content: Text("Connexion direct à $ip via lecture de QRCode."),
+            backgroundColor: Colors.lightBlue,
+            progressBackgroundColor: Colors.lightBlue.shade50,
+            progressValueColor: Colors.lightBlue.shade700,
+          ),
+        );
+      }
+
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => MainRoute(myApp: widget.myApp, ipAddress: matche.group(1)),
+          pageBuilder: (context, animation1, animation2) => MainRoute(myApp: widget.myApp, ipAddress: ip),
           transitionDuration: const Duration(seconds: 0),
         ),
       );
