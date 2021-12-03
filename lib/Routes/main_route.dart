@@ -20,7 +20,7 @@ import 'package:domofit/main.dart';
 import 'device_search_route.dart';
 
 class MainRoute extends StatefulWidget {
-  final MyApp myApp;
+  final MyAppState myApp;
   final String? ipAddress;
 
   const MainRoute({Key? key,

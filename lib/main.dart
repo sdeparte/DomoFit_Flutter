@@ -4,12 +4,26 @@ import 'package:flutter/services.dart';
 
 import 'Tools/sd_colors.dart';
 import 'Widgets/Popups/exit_popup.dart';
-//import 'Widgets/Popups/exit_popup.dart';
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => MyAppState();
+}
+
+class MyAppState extends State<MyApp> {
+  late bool _initialUriIsHandled = false;
+
+  bool getInitialUriIsHandled() {
+    return _initialUriIsHandled;
+  }
+
+  void setInitialUriIsHandled() {
+    _initialUriIsHandled = true;
+  }
 
   void showExitDialog(BuildContext context) {
     showGeneralDialog(

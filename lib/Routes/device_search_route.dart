@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'main_route.dart';
 
 class DiscoveryRoute extends StatefulWidget {
-  final MyApp myApp;
+  final MyAppState myApp;
   final bool start;
 
   const DiscoveryRoute({

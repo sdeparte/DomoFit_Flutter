@@ -28,7 +28,7 @@ class ConnexionListEntry extends StatefulWidget {
   final double delay;
   final Connexion connexion;
   final DiscoveryRouteState discoveryRouteState;
-  final MyApp myApp;
+  final MyAppState myApp;
 
   @override
   State<ConnexionListEntry> createState() => _ConnexionListEntryState();
