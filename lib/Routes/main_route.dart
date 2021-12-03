@@ -164,7 +164,13 @@ class MainRouteState extends State<MainRoute> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    if (screenWidth == 0 || screenHeight == 0) {
+      return const SizedBox();
+    }
+
     bool isButton = !isConnecting && !isConnected && widget.ipAddress != null;
 
     return WillPopScope(

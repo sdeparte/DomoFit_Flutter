@@ -119,7 +119,11 @@ class DiscoveryRouteState extends State<DiscoveryRoute> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    var scanArea = (screenWidth < 400 || screenHeight < 400) ? 200.0 : 400.0;
+    if (screenWidth == 0 || screenHeight == 0) {
+      return const SizedBox();
+    }
+
+    var scanArea = screenWidth * 0.6;
 
     return WillPopScope(
       onWillPop: () async {
