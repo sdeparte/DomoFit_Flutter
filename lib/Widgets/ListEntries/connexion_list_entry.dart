@@ -170,6 +170,9 @@ class _ConnexionListEntryState extends State<ConnexionListEntry> {
         ScaffoldMessenger.of(context).showSnackBar(
           ProgressSnackBar(
             content: const Text("Suppression de la connexion récente."),
+            backgroundColor: SdColors.red,
+            progressBackgroundColor: Colors.red.shade50,
+            progressValueColor: Colors.red.shade800,
             action: SnackBarAction(
               label: "Annuler",
               textColor: Colors.white,
