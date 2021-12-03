@@ -78,6 +78,8 @@ class ProgressSnackBar extends StatefulWidget implements SnackBar {
       key: key ?? fallbackKey,
       content: content,
       backgroundColor: backgroundColor,
+      progressValueColor: progressValueColor,
+      progressBackgroundColor: progressBackgroundColor,
       elevation: elevation,
       margin: margin,
       padding: padding,
