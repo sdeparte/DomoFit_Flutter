@@ -45,12 +45,14 @@ class _ShortcutButtonState extends State<ShortcutButton> {
       borderRadius: BorderRadius.circular(widget.small ? 15.0 : 17.0),
       child: ClipPath(
         clipper: RoundedClipper(),
-        child: Container(
-          color: widget.pictoBackgroundColor,
-          padding: const EdgeInsets.all(5.0),
-          width: MediaQuery.of(context).size.width * 3/5,
-          child: Align(
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
             alignment: Alignment.bottomRight,
+            color: widget.pictoBackgroundColor,
+            padding: const EdgeInsets.all(6.0),
+            width: 40,
+            height: 40,
             child: Icon(
               widget.pictoIcon,
               color: Colors.white,
@@ -69,19 +71,32 @@ class _ShortcutButtonState extends State<ShortcutButton> {
       logoWidget = RoundedButton(
         height: widget.small ? 57 : 70,
         width: widget.small ? 57 : 70,
-        borderRadius: BorderRadius.circular(widget.small ? 15.0 : 17.0),
-        backgroundColor: widget.backgroundColor,
+        borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(70.0),
+            bottomRight: Radius.circular(34.0),
+            topLeft: Radius.circular(70.0),
+            topRight: Radius.circular(70.0),
+        ),
+        backgroundColor: Colors.white,
         textColor: Colors.white,
         splashColor: widget.splashColor,
         onPressed: widget.onTap,
-        child: Ink.image(
-          image: null != widget.shortcut && null != widget.shortcut!.logoImage
-              ? widget.shortcut!.logoImage!.image
-              : Image.memory(base64.decode(widget.logoBase64 as String)).image,
-          child: InkWell(
-            splashColor: widget.splashColor,
-            borderRadius: BorderRadius.circular(17.0),
-            onTap: widget.onTap,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(70.0),
+          child: Material(
+            child: Ink.image(
+              height: widget.small ? 57 : 70,
+              width: widget.small ? 57 : 70,
+              fit: BoxFit.cover,
+              image: null != widget.shortcut && null != widget.shortcut!.logoImage
+                  ? widget.shortcut!.logoImage!.image
+                  : Image.memory(base64.decode(widget.logoBase64 as String)).image,
+              child: InkWell(
+                splashColor: widget.splashColor,
+                borderRadius: BorderRadius.circular(70.0),
+                onTap: widget.onTap,
+              ),
+            ),
           ),
         ),
       );
@@ -89,7 +104,7 @@ class _ShortcutButtonState extends State<ShortcutButton> {
       logoWidget = RoundedButton(
         height: widget.small ? 57 : 70,
         width: widget.small ? 57 : 70,
-        borderRadius: BorderRadius.circular(widget.small ? 15.0 : 17.0),
+        borderRadius: BorderRadius.circular(70.0),
         backgroundColor: widget.noLogoBackgroundColor,
         textColor: Colors.white,
         splashColor: widget.splashColor,

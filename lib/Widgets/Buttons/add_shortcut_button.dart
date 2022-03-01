@@ -21,54 +21,65 @@ class AddShortcutButton extends StatelessWidget {
           SizedBox(
             height: 70,
             width: 70,
-            child: Stack(
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(17),
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [SdColors.greenAccent, SdColors.green],
-                      ),
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        splashColor: splashColor,
-                        onTap: onPressed,
-                        child: const Icon(
-                          Icons.exit_to_app_rounded,
-                          color: Colors.white,
-                          size: 50,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(17),
-                  child: ClipPath(
-                    clipper: RoundedClipper(),
+            child: Material(
+              elevation: 2.0,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(70.0),
+                bottomRight: Radius.circular(34.0),
+                topLeft: Radius.circular(70.0),
+                topRight: Radius.circular(70.0),
+              ),
+              child: Stack(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(70),
                     child: Container(
-                      color: Colors.lightBlue,
-                      padding: const EdgeInsets.all(5.0),
-                      width: MediaQuery.of(context).size.width * 3/5,
-                      child: const Align(
-                        alignment: Alignment.bottomRight,
-                        child: Icon(
-                          Icons.add_circle_outline,
-                          color: Colors.white,
-                          size: 18,
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [SdColors.greenAccent, SdColors.green],
+                        ),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          splashColor: splashColor,
+                          onTap: onPressed,
+                          child: const Icon(
+                            Icons.exit_to_app_rounded,
+                            color: Colors.white,
+                            size: 50,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(17),
+                    child: ClipPath(
+                      clipper: RoundedClipper(),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                          alignment: Alignment.bottomRight,
+                          color: Colors.lightBlue,
+                          padding: const EdgeInsets.all(6.0),
+                          width: 40,
+                          height: 40,
+                          child: const Icon(
+                            Icons.add_circle_outline,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Padding(
