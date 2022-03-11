@@ -88,10 +88,12 @@ class MainRouteState extends State<MainRoute> {
       }).timeout(
           const Duration(seconds: 5),
           onTimeout: () {
-            setState(() {
-              isConnecting = false;
-              isConnected = false;
-            });
+            if (mounted) {
+              setState(() {
+                isConnecting = false;
+                isConnected = false;
+              });
+            }
           }
       );
     }
