@@ -93,12 +93,17 @@ class ShortcutsWidgetState extends State<ShortcutsWidget> with SingleTickerProvi
     List<Shortcut> shortcuts = await ShortcutsManager.instance.getAllShortcuts();
 
     for (var shortcut in shortcuts) {
-      Map<String, String?>? appInformations = await AppAvailability.checkAvailability(shortcut.packageName);
+      try {
+        Map<String, String?>? appInformations = await AppAvailability.checkAvailability(shortcut.packageName);
 
-      if (appInformations != null) {
-        setState(() {
-          shortcut.setAppInformations(appInformations);
-        });
+        if (appInformations != null) {
+          setState(() {
+            shortcut.setAppInformations(appInformations);
+          });
+        }
+      } catch (_) {
+        deleteShortcut(shortcut);
+        shortcuts.remove(shortcut);
       }
     }
 
